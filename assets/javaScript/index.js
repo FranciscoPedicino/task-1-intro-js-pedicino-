@@ -30,7 +30,7 @@ const categorias=eventos.map(evento=>evento.category)
 const  noRepetidas=new Set (categorias)
 
 const listaCategorias=Array.from(noRepetidas)
-
+  
 
 function crearCategorias(categorias,contenedorCategorias){
     let template=``
@@ -51,16 +51,18 @@ let buscador = document.getElementById('contenedor-buscador')
 
 buscador.addEventListener('input', () => {
     let busqueda = buscador.value.toLowerCase();
-    let categoriasElegidas = Array.from(document.getElementById('input[id=checkbox]:checked')).map(valorCategoria => valorCategoria.value);
+    let categoriasElegidas = Array.from(document.querySelectorAll('input[id=checkbox]:checked')).map(valorCategoria => valorCategoria.value);
+    
     let eventosFiltrados = eventos.filter((evento) => {
         return (evento.name.toLowerCase().includes(busqueda) || evento.description.toLowerCase().includes(busqueda))
             && (categoriasElegidas.length === 0 || categoriasElegidas.includes(evento.category));
-    
+            
+            
     })
 
     let cards = '';
     if (eventosFiltrados.length === 0) {
-        cards = '<p>No se encontraron eventos.</p>';
+        cards = '<p>No events found.</p>';
     } else {
         for (let evento of eventosFiltrados) {
             cards += crearCartas(evento);

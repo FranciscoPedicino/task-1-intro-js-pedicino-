@@ -76,7 +76,7 @@ buscador.addEventListener('input', () => {
 
     let cards = '';
     if (eventosFiltrados.length === 0) {
-        cards = '<p>No se encontraron eventos.</p>';
+        cards = '<p>No events found.</p>';
     } else {
         for (let evento of eventosFiltrados) {
             cards += crearCartas(evento);
