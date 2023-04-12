@@ -1,89 +1,69 @@
-const $contenedor = document.getElementById(`contenedor-eventos`)
+  const $contenedor = document.getElementById(`contenedor-eventos`)
 
-const eventos= eventsAmazing.eventos
-let evento= eventos
-let cards = ` `
+
+const url=` https://mindhub-xj03.onrender.com/api/amazing`
+fetch(url)
+.then(Response => Response.json())
+.then(date =>{
+      let eventos=date.events
+      let evento = eventos 
+      let cards = ``
 for ( evento of eventos) {
       cards += crearCartas(evento)
 }
 
-function crearCartas (evento){
-    return `<div class=" cartas  card " style="width: 19rem;">
-    <img src="${evento.image}" class=" img-carta card-img-top " alt="feria de comida">
-    <div class=" card-body  d-flex flex-column ">
-    <h5 class=" h5-card  text-center "> ${evento.name} </h5>
-    <p  class=" text-white card-text">  ${evento.description}  </p>
-    <div class=" price-botton d-flex justify-content-between ">
-    <p class="text-white ">  $ ${evento.price} </p>
-    <a href="./assets/pages/details.html?name=${evento.name}" class="botton-card">Details </a>
-    </div>
-    </div>
-    </div>` 
-}
 $contenedor.innerHTML=cards
 
 
 const contenedorCategorias=document.getElementById(`contenedor-categorias`)
-
 const categorias=eventos.map(evento=>evento.category)
-
-const  noRepetidas=new Set (categorias)
-
-const listaCategorias=Array.from(noRepetidas)
-  
-
-function crearCategorias(categorias,contenedorCategorias){
-    let template=``
-    for(let categoria of categorias){
-        template+=`<div>
-        <label class=" text-white justify-content-around" for="festival">${categoria} </label>
-        <input type="checkbox" name="categoriaelegida" id="checkbox" value="${categoria}">
-        </div>
-        `
-    }
-    contenedorCategorias.innerHTML=template
-}
-crearCategorias(listaCategorias,contenedorCategorias)
-
+const  listaCategorias=[...new Set (categorias)]
 
 
 let buscador = document.getElementById('contenedor-buscador')
+crearCategorias(listaCategorias,contenedorCategorias)
 
 buscador.addEventListener('input', () => {
-    let busqueda = buscador.value.toLowerCase();
+    let busqueda = buscador.value.toLowerCase()
     let categoriasElegidas = Array.from(document.querySelectorAll('input[id=checkbox]:checked')).map(valorCategoria => valorCategoria.value);
     
     let eventosFiltrados = eventos.filter((evento) => {
         return (evento.name.toLowerCase().includes(busqueda) || evento.description.toLowerCase().includes(busqueda))
-            && (categoriasElegidas.length === 0 || categoriasElegidas.includes(evento.category));
-            
-            
+        && (categoriasElegidas.length === 0 || categoriasElegidas.includes(evento.category))
+        
     })
-
-    let cards = '';
+    let cards = ''
     if (eventosFiltrados.length === 0) {
-        cards = '<p>No events found.</p>';
+        cards = '<p>No events found.</p>'
     } else {
         for (let evento of eventosFiltrados) {
-            cards += crearCartas(evento);
+            cards += crearCartas(evento)
         }
     }
-    document.getElementById('contenedor-eventos').innerHTML = cards;
+    document.getElementById('contenedor-eventos').innerHTML = cards
 })
 
+
+
 contenedorCategorias.addEventListener(`change`, () => {
-    let busqueda = buscador.value.toLowerCase();
-    let categoriasElegidas = Array.from(document.querySelectorAll('input[id=checkbox]:checked')).map(valorCategoria => valorCategoria.value);
+    let busqueda = buscador.value.toLowerCase()
+    let categoriasElegidas = Array.from(document.querySelectorAll('input[id=checkbox]:checked')).map(valorCategoria => valorCategoria.value)
     let eventosFiltrados = eventos.filter((evento) => {
         return (evento.name.toLowerCase().includes(busqueda) || evento.description.toLowerCase().includes(busqueda))
-            && (categoriasElegidas.length === 0 || categoriasElegidas.includes(evento.category));
+        && (categoriasElegidas.length === 0 || categoriasElegidas.includes(evento.category))
     });
-    cards = ''
+    cards = ' '
     for (let evento of eventosFiltrados) {
         cards += crearCartas(evento)
     }
     document.getElementById('contenedor-eventos').innerHTML = cards
 })
+})
+.catch(err => console.log(err))
+
+import { crearCartas,crearCategorias,} from "../../module/funciones.js"
+
+
 
 
 
